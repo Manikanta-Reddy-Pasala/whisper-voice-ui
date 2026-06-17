@@ -72,7 +72,14 @@ def stream(new_chunk, state, model_size, language):
 
     model = get_model(model_size)
     lang = None if language == "auto" else language
-    segments, _ = model.transcribe(buf, beam_size=1, language=lang)
+    segments, _ = model.transcribe(
+        buf,
+        language=lang,
+        task="transcribe",          # transcribe in spoken language, never translate
+        beam_size=5,                # better accuracy than greedy
+        vad_filter=True,            # drop silence -> far less hallucination
+        condition_on_previous_text=False,  # re-transcribing a buffer: don't loop on prior text
+    )
     text = " ".join(seg.text.strip() for seg in segments).strip()
     return buf, text
 
