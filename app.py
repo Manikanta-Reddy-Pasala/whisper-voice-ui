@@ -42,7 +42,7 @@ with gr.Blocks(title="Whisper Voice-to-Text") as demo:
         with gr.Column():
             model_size = gr.Dropdown(
                 ["tiny", "base", "small", "medium", "large-v3"],
-                value="base",
+                value="large-v3",
                 label="Model (bigger = more accurate, slower)",
             )
             language = gr.Dropdown(
