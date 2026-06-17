@@ -6,14 +6,16 @@ Simple web UI for speech-to-text using [faster-whisper](https://github.com/SYSTR
 
 The UI is a web page. Your **Windows browser** captures the microphone and sends the audio to the server — so you don't need any Linux/WSL audio drivers. WSL just runs Python.
 
-## Quick start (WSL Ubuntu)
+## Quick start (WSL / Linux / macOS)
 
 ```bash
 cd whisper-voice-ui
 ./run.sh
 ```
 
-`run.sh` installs ffmpeg, creates a venv, installs Python deps, and launches the UI. First run downloads the `large-v3` model (~3 GB, cached after).
+`run.sh` detects the host (macOS → Homebrew, WSL/Linux → apt), installs ffmpeg, creates a venv, installs Python deps, and launches the UI. First run downloads the `large-v3` model (~3 GB, cached after).
+
+> macOS needs [Homebrew](https://brew.sh) installed first.
 
 Then open **http://localhost:7860** in your Windows browser. Allow microphone access when prompted.
 

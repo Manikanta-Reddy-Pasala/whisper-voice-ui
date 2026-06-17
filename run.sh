@@ -1,18 +1,40 @@
 #!/usr/bin/env bash
 # One-shot: install everything and launch the Whisper voice-to-text UI.
-# Usage (WSL Ubuntu):  ./run.sh
+# Works on macOS (Homebrew) and WSL/Linux (apt) — detects the host.
+# Usage:  ./run.sh
 set -euo pipefail
 
 cd "$(dirname "$0")"
 
-# 1. System deps (ffmpeg for audio decode). Skip if already present.
-if ! command -v ffmpeg >/dev/null 2>&1; then
-  echo ">> Installing ffmpeg + python venv (needs sudo)..."
-  sudo apt-get update -y
-  sudo apt-get install -y ffmpeg python3-venv
-fi
+OS="$(uname -s)"
 
-# 2. Virtual env + Python deps.
+install_ffmpeg() {
+  command -v ffmpeg >/dev/null 2>&1 && return 0
+
+  case "$OS" in
+    Darwin)
+      if ! command -v brew >/dev/null 2>&1; then
+        echo "!! Homebrew not found. Install it: https://brew.sh" >&2
+        exit 1
+      fi
+      echo ">> Installing ffmpeg via Homebrew..."
+      brew install ffmpeg
+      ;;
+    Linux)
+      echo ">> Installing ffmpeg + python venv via apt (needs sudo)..."
+      sudo apt-get update -y
+      sudo apt-get install -y ffmpeg python3-venv
+      ;;
+    *)
+      echo "!! Unsupported OS: $OS. Install ffmpeg + python3 manually." >&2
+      exit 1
+      ;;
+  esac
+}
+
+install_ffmpeg
+
+# Virtual env + Python deps.
 if [ ! -d .venv ]; then
   echo ">> Creating virtual env..."
   python3 -m venv .venv
@@ -23,6 +45,6 @@ echo ">> Installing Python packages..."
 pip install --upgrade pip -q
 pip install -r requirements.txt -q
 
-# 3. Launch. First run downloads large-v3 (~3 GB, cached after).
-echo ">> Starting UI at http://localhost:7860 (open in your Windows browser)"
+# Launch. First run downloads large-v3 (~3 GB, cached after).
+echo ">> Starting UI at http://localhost:7860"
 python app.py
