@@ -13,11 +13,19 @@ audio drivers — the OS only runs the web server.
 
 import os
 
-# Disable hf_transfer (Rust downloader). It uses the system CA store, which
-# minimal WSL/containers often lack -> "No CA certificates were loaded from
-# the system". The Python downloader uses certifi's bundled certs instead.
-# Must be set before huggingface_hub is imported (faster_whisper pulls it in).
+# HuggingFace's Rust downloaders (hf_xet, hf_transfer) read the *system* CA
+# store, which minimal WSL/containers often lack -> "No CA certificates were
+# loaded from the system". Disable both so downloads use the Python client,
+# and point any TLS client at certifi's bundled certs. Must run before
+# huggingface_hub is imported (faster_whisper pulls it in).
+os.environ["HF_HUB_DISABLE_XET"] = "1"
 os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
+try:
+    import certifi
+    os.environ.setdefault("SSL_CERT_FILE", certifi.where())
+    os.environ.setdefault("REQUESTS_CA_BUNDLE", certifi.where())
+except Exception:
+    pass
 
 import numpy as np
 import gradio as gr
