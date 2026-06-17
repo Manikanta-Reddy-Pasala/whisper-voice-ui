@@ -45,6 +45,6 @@ echo ">> Installing Python packages..."
 pip install --upgrade pip -q
 pip install -r requirements.txt -q
 
-# Launch. First run downloads large-v3 (~3 GB, cached after).
+# Launch. First run downloads the model (base ~140 MB, cached after).
 echo ">> Starting UI at http://localhost:7860"
 python app.py
