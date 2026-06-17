@@ -3,3 +3,6 @@ gradio==4.44.0
 numpy>=1.24,<2.0
 # huggingface_hub 1.0 removed HfFolder, which faster-whisper 1.0.3 imports.
 huggingface_hub>=0.23,<1.0
+# gradio 4.44 predates Starlette's TemplateResponse arg-order change;
+# newer fastapi/starlette breaks page rendering ("unhashable type: 'dict'").
+fastapi==0.112.4

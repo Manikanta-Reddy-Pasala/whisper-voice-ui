@@ -87,13 +87,16 @@ with gr.Blocks(title="Whisper Live Voice-to-Text") as demo:
         output = gr.Textbox(label="Live transcript", lines=12, show_copy_button=True)
 
     # Reset buffer each time a new recording starts.
-    audio.start_recording(reset, outputs=[state, output])
+    # show_api=False avoids a gradio_client 1.3.0 schema bug
+    # ("argument of type 'bool' is not iterable") and we don't need the API.
+    audio.start_recording(reset, outputs=[state, output], show_api=False)
     # Fire on every streamed chunk (~1s).
     audio.stream(
         stream,
         inputs=[audio, state, model_size, language],
         outputs=[state, output],
+        show_api=False,
     )
 
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+    demo.launch(server_name="0.0.0.0", server_port=7860, show_api=False)
