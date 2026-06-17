@@ -106,7 +106,7 @@ with gr.Blocks(title="Whisper Live Voice-to-Text") as demo:
                     "large-v2", "large-v3",
                     "distil-small.en", "distil-medium.en", "distil-large-v3",
                 ],
-                value="base",
+                value="distil-small.en",
                 label="Model (.en = English-only, faster; distil-* = fast + accurate; medium/large lag live on CPU, want a GPU)",
             )
             language = gr.Dropdown(
