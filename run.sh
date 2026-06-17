@@ -21,9 +21,10 @@ install_ffmpeg() {
       brew install ffmpeg
       ;;
     Linux)
-      echo ">> Installing ffmpeg + python venv via apt (needs sudo)..."
+      echo ">> Installing ffmpeg + python venv + CA certs via apt (needs sudo)..."
       sudo apt-get update -y
-      sudo apt-get install -y ffmpeg python3-venv
+      sudo apt-get install -y ffmpeg python3-venv ca-certificates
+      sudo update-ca-certificates || true
       ;;
     *)
       echo "!! Unsupported OS: $OS. Install ffmpeg + python3 manually." >&2

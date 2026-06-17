@@ -11,6 +11,14 @@ Mic is captured by the browser, so this works on WSL with no Linux
 audio drivers — the OS only runs the web server.
 """
 
+import os
+
+# Disable hf_transfer (Rust downloader). It uses the system CA store, which
+# minimal WSL/containers often lack -> "No CA certificates were loaded from
+# the system". The Python downloader uses certifi's bundled certs instead.
+# Must be set before huggingface_hub is imported (faster_whisper pulls it in).
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
+
 import numpy as np
 import gradio as gr
 from faster_whisper import WhisperModel
