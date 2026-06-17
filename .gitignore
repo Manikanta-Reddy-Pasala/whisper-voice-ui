@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.gradio/
+*.wav
+*.mp3
+*.m4a
