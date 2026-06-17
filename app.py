@@ -75,9 +75,16 @@ with gr.Blocks(title="Whisper Live Voice-to-Text") as demo:
         with gr.Column():
             audio = gr.Audio(sources=["microphone"], streaming=True, label="Microphone")
             model_size = gr.Dropdown(
-                ["tiny", "base", "small"],
+                [
+                    "tiny", "tiny.en",
+                    "base", "base.en",
+                    "small", "small.en",
+                    "medium", "medium.en",
+                    "large-v2", "large-v3",
+                    "distil-small.en", "distil-medium.en", "distil-large-v3",
+                ],
                 value="base",
-                label="Model (live needs a fast one; large is too slow on CPU)",
+                label="Model (.en = English-only, faster; distil-* = fast + accurate; medium/large lag live on CPU, want a GPU)",
             )
             language = gr.Dropdown(
                 ["auto", "en", "hi", "te", "es", "fr", "de", "zh", "ja"],
